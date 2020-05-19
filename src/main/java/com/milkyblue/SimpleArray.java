@@ -5,6 +5,8 @@ import java.util.Random;
 
 import javax.swing.JLabel;
 
+import com.github.tomaslanger.chalk.Chalk;
+
 public class SimpleArray {
   private final int[] array;
   private int index;
@@ -34,23 +36,29 @@ public class SimpleArray {
 
     array[postition] = value;
     lookups[postition].setText(Integer.toString(value));
-    if (color == ThreadSyncGUI.BLUE)
+    if (color == ThreadSyncGUI.BLUE) {
       lookups[postition].setBackground(Color.decode("#1D70A2"));
-    else
+      System.out.println("[" + Chalk.on(Thread.currentThread().getName().toUpperCase()).cyan() + "] wrote "
+          + Chalk.on(Integer.toString(value)).green() + " in the element number "
+          + Chalk.on(Integer.toString(postition)).green());
+    } else {
       lookups[postition].setBackground(Color.decode("#F7B626"));
-
-    System.out.println(Thread.currentThread().getName() + " wrote " + value + " in the element number " + postition);
+      System.out.println("[" + Chalk.on(Thread.currentThread().getName().toUpperCase()).yellow() + "] wrote "
+          + Chalk.on(Integer.toString(value)).green() + " in the element number "
+          + Chalk.on(Integer.toString(postition)).green());
+    }
 
     ++index;
-    System.out.println("Next index: " + index);
+    System.out.println("[" + Chalk.on("NEXT").magenta() + "] " + index);
   }
 
   public String toString() {
-    String arrayString = "\nSimple Array Content:\n";
+    String arrayString = "\n[" + Chalk.on("SIMPLE ARRAY CONTENT").magenta() + "]\n[";
 
-    for (int i = 0; i < array.length; i++) {
-      arrayString += array[i] + " ";
-    }
+    for (int i = 0; i < array.length; i++)
+      arrayString += (i != array.length - 1) ? array[i] + ", " : array[i];
+
+    arrayString += "]\n";
 
     return arrayString;
   }

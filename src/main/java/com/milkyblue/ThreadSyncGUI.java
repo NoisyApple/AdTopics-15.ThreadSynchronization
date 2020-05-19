@@ -19,6 +19,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.github.tomaslanger.chalk.Chalk;
+
 public class ThreadSyncGUI {
   public static final int BLUE = 0, YELLOW = 1;
 
@@ -29,6 +31,7 @@ public class ThreadSyncGUI {
   private JButton btnExecute;
 
   public ThreadSyncGUI() {
+    Chalk.setColorEnabled(true);
 
     mainFrame = new JFrame("Thread Synchronization");
     mainPanel = new JPanel();
@@ -104,9 +107,11 @@ public class ThreadSyncGUI {
           if (tasksStopped)
             System.out.println(sharedArray);
           else
-            System.out.println("Timeout expired while awaiting for tasks termination");
+            System.out
+                .println("[" + Chalk.on("FAILURE").red() + "] Timeout expired while awaiting for tasks termination");
         } catch (Exception ex) {
-          System.out.println("Interruption ocurred while awaiting for tasks termination");
+          System.out
+              .println("[" + Chalk.on("ERROR").red() + "] Interruption ocurred while awaiting for tasks termination");
         }
 
       }
