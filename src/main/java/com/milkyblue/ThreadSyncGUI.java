@@ -21,7 +21,9 @@ import javax.swing.JPanel;
 
 import com.github.tomaslanger.chalk.Chalk;
 
+// ThreadSyncGUI class. Models the GUI of the program.
 public class ThreadSyncGUI {
+  // Constants to control color between threads.
   public static final int BLUE = 0, YELLOW = 1;
 
   private JFrame mainFrame;
@@ -30,7 +32,9 @@ public class ThreadSyncGUI {
   private JLabel[][] arrayLookups;
   private JButton btnExecute;
 
+  // Class constructor.
   public ThreadSyncGUI() {
+    // Enables colored output on terminal.
     Chalk.setColorEnabled(true);
 
     mainFrame = new JFrame("Thread Synchronization");
@@ -40,6 +44,8 @@ public class ThreadSyncGUI {
     bottomPanel = new JPanel();
     chkSync = new JCheckBox("Thread Synchronization");
 
+    // arrayLookups is initialized as a two dimensional array of labels, one row for
+    // array positions and the other row for array actual values.
     arrayLookups = new JLabel[2][6];
 
     for (int i = 0; i < arrayLookups.length; i++)
@@ -52,6 +58,7 @@ public class ThreadSyncGUI {
 
     btnExecute = new JButton("Execute");
 
+    // Main methods are called.
     addAttributes();
     addListeners();
     build();
@@ -59,12 +66,14 @@ public class ThreadSyncGUI {
 
   }
 
+  // Adds attributes to elements in the program.
   private void addAttributes() {
     mainPanel.setLayout(new BorderLayout());
     centerPanel.setLayout(new GridBagLayout());
 
     centerPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
+    // Sets attributes to arrayLookups labels based on the correspondent row.
     for (int i = 0; i < arrayLookups.length; i++)
       for (int j = 0; j < arrayLookups[i].length; j++) {
         arrayLookups[i][j].setOpaque(true);
@@ -76,18 +85,21 @@ public class ThreadSyncGUI {
 
         arrayLookups[i][j].setForeground(Color.decode("#DDDDDD"));
         arrayLookups[i][j].setPreferredSize(new Dimension(30, 20));
-
       }
 
     mainFrame.setResizable(false);
     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
 
+  // Adds listeners to elements in the GUI.
   private void addListeners() {
+
+    // Creates a SimpleArray instance and uses two ArrayWriter instances to fill it.
     btnExecute.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         boolean useSync = chkSync.isSelected();
 
+        // Resets values row background and text.
         for (JLabel lookup : arrayLookups[1]) {
           lookup.setBackground(Color.decode("#888888"));
           lookup.setText("0");
@@ -97,11 +109,13 @@ public class ThreadSyncGUI {
         ArrayWriter writer1 = new ArrayWriter(1, sharedArray, arrayLookups[1], BLUE, useSync);
         ArrayWriter writer2 = new ArrayWriter(11, sharedArray, arrayLookups[1], YELLOW, useSync);
 
+        // Executes both instances of ArrayWriter.
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.execute(writer1);
         executor.execute(writer2);
         executor.shutdown();
 
+        // Waits for executor threads termination.
         try {
           boolean tasksStopped = executor.awaitTermination(1, TimeUnit.MINUTES);
           if (tasksStopped)
@@ -118,11 +132,13 @@ public class ThreadSyncGUI {
     });
   }
 
+  // Builds the GUI.
   private void build() {
     topPanel.add(chkSync);
 
     GridBagConstraints gbc = new GridBagConstraints();
 
+    // Adds arrayLookups labels.
     for (int i = 0; i < arrayLookups.length; i++)
       for (int j = 0; j < arrayLookups[i].length; j++) {
         gbc.gridy = i;
@@ -142,10 +158,11 @@ public class ThreadSyncGUI {
     mainFrame.add(mainPanel);
   }
 
+  // Launches mainFrame by setting its visible value to true, then centers and
+  // resizes the frame.
   private void launch() {
     mainFrame.setVisible(true);
     mainFrame.pack();
     mainFrame.setLocationRelativeTo(null);
   }
-
 }
