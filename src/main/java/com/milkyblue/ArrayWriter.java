@@ -23,7 +23,7 @@ public class ArrayWriter implements Runnable {
       if (useSync)
         sharedArray.addSync(i, lookups, color);
       else
-        sharedArray.add(i, lookups, color);
+        sharedArray.addNonSync(i, lookups, color);
 
   }
 

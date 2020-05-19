@@ -18,14 +18,14 @@ public class SimpleArray {
   }
 
   public synchronized void addSync(int value, JLabel[] lookups, int color) {
-    updateArray(value, lookups, color);
+    add(value, lookups, color);
   }
 
-  public void add(int value, JLabel[] lookups, int color) {
-    updateArray(value, lookups, color);
+  public void addNonSync(int value, JLabel[] lookups, int color) {
+    add(value, lookups, color);
   }
 
-  private void updateArray(int value, JLabel[] lookups, int color) {
+  private void add(int value, JLabel[] lookups, int color) {
     int postition = index;
 
     try {
